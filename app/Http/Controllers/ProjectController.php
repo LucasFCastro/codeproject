@@ -37,7 +37,8 @@ class ProjectController extends Controller
      */
     public function index()
     {
-        return $this->repository->all();
+        $userId = Authorizer::getResourceOwnerId();
+        return $this->repository->findWhere(['owner_id'=>$userId]);
     }
 
     /**
@@ -59,14 +60,11 @@ class ProjectController extends Controller
      */
     public function show($id)
     {
-
-        $userId = Authorizer::getResourceOwnerId();
-
-        if($this->repository->isOwner($id, $userId)){
-            return $this->repository->find($id);
-
+        if (!$this->isOwner($id)){
+            return ['error'=>'Access forbirdden'];
         }
-        return ['access' => 'denide'];
+
+        return $this->repository->find($id);
     }
 
     /**
@@ -78,6 +76,10 @@ class ProjectController extends Controller
      */
     public function update(Request $request, $id)
     {
+        if (!$this->isOwner($id)){
+            return ['error'=>'Access forbirdden'];
+        }
+
         return $this->service->update($request->all(), $id);
     }
 
@@ -89,6 +91,17 @@ class ProjectController extends Controller
      */
     public function destroy($id)
     {
+        if (!$this->isOwner($id)){
+            return ['error'=>'Access forbirdden'];
+        }
+
         $this->repository->find($id)->delete($id);
     }
+
+    private function isOwner($id){
+        $userId = Authorizer::getResourceOwnerId();
+        return $this->repository->isOwner($id, $userId);
+    }
+
+
 }

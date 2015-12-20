@@ -23,14 +23,18 @@ Route::group(['middleware'=>'oauth'], function(){
 
     Route::resource('client', 'ClientController', ['exception' => ['create', 'edit']]);
 
-
 //    Route::get('client', 'ClientController@index');
 //    Route::get('client/{id}', 'ClientController@show');
 //    Route::post('client', 'ClientController@store');
 //    Route::put('client/{id}', 'ClientController@update');
 //    Route::delete('client/{id}', 'ClientController@destroy');
 
+//    Route::group(['middleware'=>'CheckProjectOwner'], function(){
+//        Route::resource('project', 'ProjectController', ['exception' => ['create', 'edit']]);
+//    });
+
     Route::resource('project', 'ProjectController', ['exception' => ['create', 'edit']]);
+
     Route::group(['prefix' => 'project'], function(){
 
         Route::get('{id}/note', 'ProjectNoteController@index');
@@ -40,9 +44,6 @@ Route::group(['middleware'=>'oauth'], function(){
         Route::delete('{id}/note/{noteId}', 'ProjectNoteController@destroy');
 
     });
-
-
-
 
 //    Route::get('project', 'ProjectController@index');
 //    Route::get('project/{id}', 'ProjectController@show');
