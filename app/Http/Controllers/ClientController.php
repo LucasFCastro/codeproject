@@ -5,7 +5,9 @@ namespace CodeProject\Http\Controllers;
 use CodeProject\Http\Requests;
 use CodeProject\Repositories\ClientRepository;
 use CodeProject\Services\ClientService;
+use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Illuminate\Http\Request;
+use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 
 class ClientController extends Controller
 {
@@ -81,6 +83,7 @@ class ClientController extends Controller
      */
     public function destroy($id)
     {
-        $this->repository->find($id)->delete($id);
+
+        $this->repository->find($id)->delete();
     }
 }
