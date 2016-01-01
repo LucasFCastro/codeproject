@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" ng-app="app">
 <head>
 	<meta charset="utf-8">
 	<meta http-equiv="X-UA-Compatible" content="IE=edge">
@@ -8,7 +8,7 @@
 
 	@if(Config::get('app.debug'))
 		<link rel="stylesheet" href="{{asset('build/css/vendor/bootstrap.min.css')}}" />
-		<link rel="stylesheet" href="{{asset('build/css/vendor/bootstrap.theme.min.css')}}" />
+		<link rel="stylesheet" href="{{asset('build/css/vendor/bootstrap-theme.min.css')}}" />
 	@else
 		<link rel="stylesheet" href="{{elixir('css/all.css')}}" />
 	@endif
@@ -62,7 +62,9 @@
 		</div>
 	</nav>
 
-	@yield('content')
+	<div ng-view>
+
+	</div>
 
 	<!-- Scripts -->
 	@if(Config::get('app.debug'))
@@ -74,6 +76,13 @@
 		<script src="{{asset('build/js/vendor/angular-messages.min.js')}}"></script>
 		<script src="{{asset('build/js/vendor/ui-bootstrap.min.js')}}"></script>
 		<script src="{{asset('build/js/vendor/navbar.min.js')}}"></script>
+		<script src="{{asset('build/js/vendor/navbar.min.js')}}"></script>
+
+		<script src="{{asset('build/js/app.js')}}"></script>
+		<script src="{{asset('build/js/controllers/home.js')}}"></script>
+		<script src="{{asset('build/js/controllers/login.js')}}"></script>
+
+
 	@else
 		<script src="{{elixir('js/all.js')}}"></script>
 	@endif
