@@ -98,6 +98,13 @@ class ProjectController extends Controller
         $this->repository->find($id)->delete($id);
     }
 
+    public function showMembers($id) {
+        $project = $this->repository->skipPresenter()->find($id);
+        $members = $project->members()->get();
+
+        return $members;
+    }
+
     private function isNotOwner($id){
         $userId = Authorizer::getResourceOwnerId();
         return !$this->repository->isOwner($id, $userId);
@@ -107,5 +114,6 @@ class ProjectController extends Controller
         $userId = Authorizer::getResourceOwnerId();
         return !$this->repository->hasMember($id, $userId);
     }
+
 
 }

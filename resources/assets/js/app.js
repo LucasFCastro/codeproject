@@ -1,4 +1,4 @@
-var app = angular.module('app',['ngRoute', 'angular-oauth2','app.controllers']);
+var app = angular.module('app',['ngRoute','angular-oauth2', 'app.controllers']);
 
 angular.module('app.controllers',['angular-oauth2']);
 

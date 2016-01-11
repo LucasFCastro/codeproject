@@ -9,6 +9,7 @@
 namespace CodeProject\Services;
 
 
+use CodeProject\Entities\User;
 use CodeProject\Repositories\ProjectRepository;
 use CodeProject\Validators\ProjectValidator;
 use Illuminate\Contracts\Filesystem\Factory as Storage;
@@ -34,6 +35,10 @@ class ProjectService
      * @var Storage
      */
     private $storage;
+    /**
+     * @var User
+     */
+    private $user;
 
     /**
      * @param ProjectRepository $repository
@@ -44,12 +49,14 @@ class ProjectService
     public function __construct(ProjectRepository $repository,
                                 ProjectValidator $validator,
                                 Filesystem $filesystem,
-                                Storage $storage)
+                                Storage $storage,
+                                User $user)
     {
         $this->repositoy = $repository;
         $this->validator = $validator;
         $this->filesystem = $filesystem;
         $this->storage = $storage;
+        $this->user = $user;
     }
 
     public function create(array $data)
@@ -93,4 +100,38 @@ class ProjectService
             $data['extension'], $this->filesystem->get($data['file']));
 
     }
+
+    public function addMember(array $data)
+    {
+        try {
+            $project = $this->repositoy->skipPresenter()->find($data['id']);
+            $user = $this->user->find($data['$memberId']);
+            $project->members()->attach($user);
+        } catch (\Exception $e) {
+            return [
+                'error' => true,
+                'message' => $e->getMessage()
+            ];
+        }
+    }
+
+    public function removeMember(array $data)
+    {
+        try {
+            $project = $this->repositoy->skipPresenter()->find($data['id']);
+            $user = $this->user->find($data['$memberId']);
+            $project->members()->detach($user);
+        } catch (\Exception $e) {
+            return [
+                'error' => true,
+                'message' => $e->getMessage()
+            ];
+        }
+    }
+
+
+    public function isMember($id, $memberId){
+        return $this->repository->hasMember($id, $memberId);
+    }
+
 }
