@@ -4,14 +4,23 @@ angular.module('app.controllers')
             username: '',
             passowrd: ''
         };
+
+        $scope.error = {
+            error: false,
+            message: ''
+        };
+
         $scope.login = function(){
-            OAuth.getAccessToken($scope.user)
-                .then(
-                function(){
-                    $location.path('home');
-                },
-                function(){
-                    alert('Login inválido!');
-                });
+            if ($scope.form.$valid) {
+                OAuth.getAccessToken($scope.user)
+                    .then(
+                        function(){
+                            $location.path('home');
+                        },
+                        function(data){
+                            $scope.error.error = true;
+                            $scope.error.message = data.data.error_description;
+                        });
+            }
         };
     }]);
